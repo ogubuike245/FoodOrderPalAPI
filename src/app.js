@@ -15,9 +15,14 @@ import connectToDatabase from './config/config.js';
 
 //Import app routes
 import authRoutes from './routes/auth.route.js';
+import userRoutes from './routes/user.route.js';
+import menuRoutes from './routes/menu.route.js';
+import orderRoutes from './routes/order.route.js';
+import tableRoutes from './routes/table.route.js';
 
-// Create a new instance of the Express application
+// Create ainstance of the Express application
 const app = express();
+const { API_URL } = process.env;
 
 // Add your other middleware and routes here
 
@@ -45,7 +50,11 @@ app.get('/', (_, response) => {
     response.status(400).json('Welcome to the FoodOrderPal API ');
 });
 
-app.use('/api/v1/auth', authRoutes);
+app.use(`${API_URL}/auth`, authRoutes);
+app.use(`${API_URL}/users`, userRoutes);
+app.use(`${API_URL}/menu`, menuRoutes);
+app.use(`${API_URL}/orders`, orderRoutes);
+app.use(`${API_URL}/tables`, tableRoutes);
 
 // Call the function to connect to MongoDB
 connectToDatabase(app);
