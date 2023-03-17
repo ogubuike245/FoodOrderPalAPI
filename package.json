@@ -1,0 +1,36 @@
+{
+  "name": "foodorderpalapi",
+  "version": "1.0.0",
+  "description": "FoodOrderPalAPI is a backend API for restaurant applications built with Node.js, Express, and Mongoose. It provides RESTful endpoints for browsing menus, placing orders, and managing tables. The codebase includes controllers, models, and routes for menu items, orders, tables, and users, as well as authentication and authorization middleware. With FoodOrderPalAPI, developers can easily build a frontend or mobile application to offer a seamless restaurant experience for their customers.",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ogubuike245/FoodOrderPalAPI.git"
+  },
+  "keywords": [
+    "food",
+    "order",
+    "user",
+    "api"
+  ],
+  "author": "ogubuike emejuru",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ogubuike245/FoodOrderPalAPI/issues"
+  },
+  "homepage": "https://github.com/ogubuike245/FoodOrderPalAPI#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "helmet": "^6.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.2"
+  }
+}
