@@ -35,11 +35,7 @@ Replace your-secret-key with a unique secret key for your application.
 
 Finally, start the server by running:
 
-sql
-Copy code
-
-```
-npm start
+```npm start
 
 ```
 
