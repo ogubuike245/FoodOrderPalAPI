@@ -35,8 +35,8 @@ Replace your-secret-key with a unique secret key for your application.
 
 Finally, start the server by running:
 
-```npm start
-
+```bash
+npm start
 ```
 
 # Usage
