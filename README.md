@@ -42,7 +42,7 @@ variables:
                   JWT_NAME="JWT_NAME"
                   MAX_AGE=3h
                   VERIFY_URL=http://localhost:5000/api/v1/user/verify
-                  Replace your-secret-key with a unique secret key for your application.
+                  Replace JWT_SECRET with a unique secret key for your application.
 
 
 # EMAIL VARIABLES:
@@ -105,7 +105,7 @@ The FoodOrderPalAPI provides the following endpoints:
 
 -   PUT /users/:id: Updates a user's account information by their ID
 
-For more detailed information about each endpoint, refer to the API documentation in the `/docs`
+For more detailed information about each endpoint, refer to the API documentation in the `/src/docs`
 folder.
 
 # Contributing
