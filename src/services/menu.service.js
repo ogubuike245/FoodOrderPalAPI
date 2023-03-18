@@ -119,11 +119,30 @@ export const updateMenuService = async (id, menuData) => {
 
 // Deletes a menu item by its ID
 export const deleteMenuService = async (id) => {
-    const menu = await Menu.findByIdAndDelete(id);
-    if (!menu) {
-        throw new Error('Menu item not found');
+    try {
+        const existingMenu = await Menu.findById(id);
+
+        if (!existingMenu) {
+            return {
+                success: false,
+                message: 'Menu item not found',
+                status: 404
+            };
+        } else {
+            await Menu.findByIdAndDelete(id);
+            return {
+                success: true,
+                message: 'Menu item deleted successfully',
+                status: 200
+            };
+        }
+    } catch (error) {
+        return {
+            error: true,
+            message: 'Internal server error.',
+            status: 500
+        };
     }
-    return { message: 'Menu item deleted successfully' };
 };
 
 export const createMenuCategoryService = async (categoryData) => {

@@ -11,7 +11,7 @@ import {
 export const getAllMenus = async (req, res, next) => {
     try {
         const { status, error, message, menu } = await getAllMenuService();
-        return res.status(status).json({
+        return res.status(Number(status)).json({
             success: !error,
             message,
             menu
@@ -76,14 +76,22 @@ export const updateMenu = async (req, res, next) => {
 
 export const deleteMenu = async (req, res, next) => {
     try {
-        const result = deleteMenuService(req.params.id);
-        if (!result) {
-            res.status(404).json({ message: 'Menu item not found' });
-        } else {
-            res.status(200).json({ message: 'Menu item deleted successfully' });
-        }
+        console.log(req.params.id);
+        const { id } = req.params;
+
+        const { status, error, message } = await deleteMenuService(id);
+
+        return res.status(Number(status)).json({
+            success: !error,
+            message
+        });
     } catch (error) {
-        next(error);
+        console.log(error);
+        return res.status(500).json({
+            error: true,
+            message: 'Internal server error. Please try again later.',
+            error: error.message
+        });
     }
 };
 
@@ -92,7 +100,7 @@ export const createMenuCategory = async (req, res, next) => {
     try {
         const { status, error, message, newCategory } = await createMenuCategoryService(req.body);
 
-        return res.status(status).json({
+        return res.status(Number(status)).json({
             success: !error,
             message,
             newCategory
