@@ -2,79 +2,110 @@ import Menu from '../models/menu.model.js';
 import Category from '../models/category.model.js';
 
 // Retrieves all menus
-export const getAllMenusService = async () => {
-    return await Menu.find({});
+export const getAllMenuService = async () => {
+    try {
+        const menu = await Menu.find({});
+        if (!menu.length) {
+            return {
+                error: true,
+                message: 'No menus found.',
+                status: 404
+            };
+        }
+        return {
+            success: true,
+            menu,
+            status: 200
+        };
+    } catch (error) {
+        return {
+            error: true,
+            message: 'Internal server error.',
+            status: 500
+        };
+    }
 };
 
 // Retrieves a specific menu item by its ID
-export const getMenuByIdService = async (id) => {
-    return await Menu.findById(id);
-};
+export const getMenuByIdService = async (id) => Menu.findById(id);
 
 // Creates a new menu item
+
 export const createMenuService = async (menuData) => {
-    const {
-        name,
-        price,
-        category_id,
-        description,
-        image,
-        vegetarian,
-        calories,
-        protein,
-        fat,
-        carbohydrate,
-        history,
-        ratings,
-        customizations
-    } = menuData;
+    try {
+        const {
+            name,
+            price,
+            category_id,
+            description,
+            image,
+            vegetarian,
+            calories,
+            protein,
+            fat,
+            carbohydrate,
+            history,
+            ratings,
+            customizations
+        } = menuData;
 
-    if (!name || !price || !category_id || !description) {
+        if (!name || !price || !category_id || !description) {
+            return {
+                error: true,
+                message: 'Name, price, and category are required',
+                status: 404
+            };
+        }
+
+        const existingMenu = await Menu.findOne({ name: name.toLowerCase() });
+        if (existingMenu) {
+            return {
+                status: 404,
+                error: true,
+                message: 'A menu with that name already exists'
+            };
+        }
+
+        let category = await Category.findOne({ _id: category_id });
+        if (!category) {
+            return {
+                error: true,
+                status: 404,
+                message: 'Category does not exist'
+            };
+        }
+
+        const menu = new Menu({
+            name,
+            price,
+            category_id: category._id,
+            description,
+            image,
+            vegetarian,
+            calories,
+            protein,
+            fat,
+            carbohydrate,
+            history,
+            ratings,
+            customizations
+        });
+
+        const newMenu = await menu.save();
+
+        return {
+            status: 200,
+            success: true,
+            message: 'Menu item created successfully',
+            newMenu
+        };
+    } catch (error) {
         return {
             error: true,
-            message: 'Name, price, and category are required'
+            message: 'Internal server error.',
+            status: 500
         };
     }
-
-    const existingMenu = await Menu.findOne({ name: name.toLowerCase() });
-    if (existingMenu) {
-        return {
-            error: true,
-            message: 'A menu with that name already exists'
-        };
-    }
-
-    let category = await Category.findOne({ _id: category_id });
-    if (!category) {
-        return {
-            error: true,
-            message: 'Category does not exist'
-        };
-    }
-
-    const menu = new Menu({
-        name,
-        price,
-        category_id: category._id,
-        description,
-        image,
-        vegetarian,
-        calories,
-        protein,
-        fat,
-        carbohydrate,
-        history,
-        ratings,
-        customizations
-    });
-
-    const newMenu = await menu.save();
-
-    return {
-        error,
-        message,
-        menu: newMenu
-    };
 };
 
 // Updates a menu item by its ID
