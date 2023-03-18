@@ -5,7 +5,7 @@ import {
     getAllMenuService,
     getMenuByIdService,
     updateMenuService
-} from '../services/menu.service.js';
+} from '../services/api/v1/menu.service.js';
 
 // GET /all: Retrieves the restaurant's menu
 export const getAllMenus = async (req, res, next) => {
@@ -24,7 +24,7 @@ export const getAllMenus = async (req, res, next) => {
     }
 };
 
-// GET /menu/:id: Retrieves a specific menu item by its ID
+// GET /api/v1/menu/:id: Retrieves a specific menu item by its ID
 export const getMenuById = async (req, res, next) => {
     const { id } = req.params;
     try {
@@ -38,7 +38,7 @@ export const getMenuById = async (req, res, next) => {
     }
 };
 
-// POST /menu: Creates a new menu item
+// POST /api/v1/menu/create: Creates a new menu item
 export const createMenu = async (req, res, next) => {
     try {
         const { status, error, message, newMenu } = await createMenuService(req.body);
@@ -57,22 +57,34 @@ export const createMenu = async (req, res, next) => {
     }
 };
 
-// PUT /menu/:id: Updates a menu item by its ID
-export const updateMenu = async (req, res, next) => {
+// PUT /api/v1/menu/update/:id: Updates a menu item by its ID
+export const updateMenu = async (req, res) => {
     try {
-        const result = updateMenuService(req.params.id, req.body);
-
-        if (!result) {
-            res.status(404).json({ message: 'Menu item not found' });
+        const result = await updateMenuService(req.params.id, req.body);
+        if (result.error) {
+            return res.status(result.status).json({
+                success: false,
+                message: result.message
+            });
         } else {
-            res.status(200).json(result);
+            const { status, success, message, updatedMenu } = result;
+            return res.status(status).json({
+                success,
+                message,
+                updatedMenu
+            });
         }
     } catch (error) {
-        next(error);
+        console.log(error);
+        return res.status(500).json({
+            error: true,
+            message: 'Internal server error. Please try again later.',
+            error: error.message
+        });
     }
 };
 
-// DELETE /menu/:id: Deletes a menu
+// DELETE /api/v1/menu/delete/:id: Deletes a menu
 
 export const deleteMenu = async (req, res, next) => {
     try {
@@ -95,7 +107,7 @@ export const deleteMenu = async (req, res, next) => {
     }
 };
 
-// POST /category: Creates a new menu category
+// POST /api/v1/menu/create/category: Creates a new menu category
 export const createMenuCategory = async (req, res, next) => {
     try {
         const { status, error, message, newCategory } = await createMenuCategoryService(req.body);

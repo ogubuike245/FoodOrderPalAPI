@@ -110,11 +110,21 @@ export const createMenuService = async (menuData) => {
 
 // Updates a menu item by its ID
 export const updateMenuService = async (id, menuData) => {
-    const menu = await Menu.findByIdAndUpdate(id, menuData, { new: true });
-    if (!menu) {
-        throw new Error('Menu item not found');
+    const existingMenu = await Menu.findById(id);
+    if (!existingMenu) {
+        throw {
+            error: true,
+            status: 404,
+            message: 'Menu item not found'
+        };
     }
-    return menu;
+    const updatedMenu = await Menu.findByIdAndUpdate(id, menuData, { new: true });
+    return {
+        status: 200,
+        success: true,
+        message: 'Menu item Updated successfully',
+        updatedMenu
+    };
 };
 
 // Deletes a menu item by its ID
