@@ -129,18 +129,35 @@ export const deleteMenuService = async (id) => {
 export const createMenuCategoryService = async (categoryData) => {
     const { name } = categoryData;
     try {
-        if (!name) {
-            throw new Error('Name is required');
+        if (!name.length) {
+            return {
+                error: true,
+                message: 'Name is required',
+                status: 404
+            };
         }
 
         const existingCategory = await Category.findOne({ name: name.toLowerCase() });
         if (existingCategory) {
-            throw new Error('Category already exists');
+            return {
+                error: true,
+                message: 'Category already exists',
+                status: 404
+            };
         }
 
         const newCategory = await Category.create({ name: name.toLowerCase() });
-        return newCategory;
+        return {
+            status: 200,
+            success: true,
+            message: 'Menu Category created successfully',
+            newCategory
+        };
     } catch (error) {
-        throw error;
+        return {
+            error: true,
+            message: 'Internal server error.',
+            status: 500
+        };
     }
 };

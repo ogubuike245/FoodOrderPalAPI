@@ -57,18 +57,6 @@ export const createMenu = async (req, res, next) => {
     }
 };
 
-// POST /category: Creates a new menu category
-export const createMenuCategory = async (req, res, next) => {
-    const { name } = req.body;
-
-    try {
-        const newCategory = createMenuCategoryService(name);
-        res.status(201).json(newCategory);
-    } catch (error) {
-        next(error);
-    }
-};
-
 // PUT /menu/:id: Updates a menu item by its ID
 export const updateMenu = async (req, res, next) => {
     try {
@@ -96,5 +84,25 @@ export const deleteMenu = async (req, res, next) => {
         }
     } catch (error) {
         next(error);
+    }
+};
+
+// POST /category: Creates a new menu category
+export const createMenuCategory = async (req, res, next) => {
+    try {
+        const { status, error, message, newCategory } = await createMenuCategoryService(req.body);
+
+        return res.status(status).json({
+            success: !error,
+            message,
+            newCategory
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: true,
+            message: 'Internal server error. Please try again later.',
+            error: error.message
+        });
     }
 };
