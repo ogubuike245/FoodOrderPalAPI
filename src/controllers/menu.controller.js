@@ -5,7 +5,7 @@ import {
     getAllMenuService,
     getMenuByIdService,
     updateMenuService
-} from '../services/api/v1/menu.service.js';
+} from '../services/menu.service.js';
 
 // GET /all: Retrieves the restaurant's menu
 export const getAllMenus = async (req, res, next) => {
@@ -34,7 +34,11 @@ export const getMenuById = async (req, res, next) => {
         }
         return res.status(200).json(menu);
     } catch (error) {
-        next(error);
+        console.log(error);
+        return res.status(500).json({
+            error: true,
+            message: 'Internal server error. Please try again later.'
+        });
     }
 };
 
