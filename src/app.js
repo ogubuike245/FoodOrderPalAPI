@@ -51,10 +51,10 @@ app.get('/', (_, response) => {
 });
 
 app.use(`${API_URL}/auth`, authRoutes);
-app.use(`${API_URL}/users`, userRoutes);
+app.use(`${API_URL}/user`, userRoutes);
 app.use(`${API_URL}/menu`, menuRoutes);
-app.use(`${API_URL}/orders`, orderRoutes);
-app.use(`${API_URL}/tables`, tableRoutes);
+app.use(`${API_URL}/order`, orderRoutes);
+app.use(`${API_URL}/table`, tableRoutes);
 
 // Call the function to connect to MongoDB
 connectToDatabase(app);
