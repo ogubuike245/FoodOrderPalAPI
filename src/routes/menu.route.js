@@ -19,15 +19,15 @@ menuRouter.get('/all', getAllMenus);
 menuRouter.get('/:id', getMenuById);
 // POST /: Creates a new menu item
 
-menuRouter.post('/', createMenu);
+menuRouter.post('/create', createMenu);
 
 // POST /category: Creates a new menu category
-menuRouter.post('/category', createMenuCategory);
+menuRouter.post('/create/category', createMenuCategory);
 
 // PUT /menu/:id: Updates a menu item by its ID
-menuRouter.put('/:id', updateMenu);
+menuRouter.put('/update/:id', updateMenu);
 // DELETE /menu/:id: Deletes a menu
 
-menuRouter.delete('/:id', deleteMenu);
+menuRouter.delete('/delete/:id', deleteMenu);
 
 export default menuRouter;
