@@ -2,17 +2,25 @@ import {
     createMenuCategoryService,
     createMenuService,
     deleteMenuService,
-    getAllMenusService,
+    getAllMenuService,
     getMenuByIdService,
     updateMenuService
 } from '../services/menu.service.js';
 
-// GET /menu: Retrieves the restaurant's menu
+// GET /all: Retrieves the restaurant's menu
 export const getAllMenus = async (req, res, next) => {
     try {
-        getAllMenusService();
+        const { status, error, message, menu } = await getAllMenuService();
+        return res.status(status).json({
+            success: !error,
+            message,
+            menu
+        });
     } catch (error) {
-        next(error);
+        return res.status(500).json({
+            error: true,
+            message: 'Internal server error.'
+        });
     }
 };
 
@@ -20,13 +28,11 @@ export const getAllMenus = async (req, res, next) => {
 export const getMenuById = async (req, res, next) => {
     const { id } = req.params;
     try {
-        const menu = getMenuByIdService(id);
-
+        const menu = await getMenuByIdService(id);
         if (!menu) {
-            res.status(404).json({ message: 'Menu item not found' });
-        } else {
-            res.status(200).json(menu);
+            return res.status(404).json({ message: 'Menu item not found' });
         }
+        return res.status(200).json(menu);
     } catch (error) {
         next(error);
     }
@@ -35,14 +41,19 @@ export const getMenuById = async (req, res, next) => {
 // POST /menu: Creates a new menu item
 export const createMenu = async (req, res, next) => {
     try {
-        const newMenu = createMenuService(req.body);
-        const { error, menu, message } = newMenu;
-        if (error) {
-            res.status(400).json({ message });
-        }
-        res.status(201).json(menu);
+        const { status, error, message, newMenu } = await createMenuService(req.body);
+        return res.status(Number(status)).json({
+            success: !error,
+            message,
+            newMenu
+        });
     } catch (error) {
-        next(error);
+        console.log(error);
+        return res.status(500).json({
+            error: true,
+            message: 'Internal server error. Please try again later.',
+            error: error.message
+        });
     }
 };
 
